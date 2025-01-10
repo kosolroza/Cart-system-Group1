@@ -27,4 +27,13 @@ class ListProduct{
     int getQuantity() const { return qty; }
     double getPrice() const { return price; }
     
+
+    void addProduct(){
+        cout << "||=============== Add Product ===============||" << endl;
+        cout << "[+] Product ID: "; cin >> id;
+        cin.ignore();
+        cout << "[+] Product Name: "; getline(cin, name);
+        cout << "[+] Product Quantity: "; cin >> qty;
+        cout << "[+] Product Price: "; cin >> price;
+    }
 };
