@@ -1,5 +1,10 @@
 {
     "files.associations": {
-        "vector": "cpp"
-    }
+        "vector": "cpp",
+        "system_error": "cpp",
+        "xlocale": "cpp",
+        "iostream": "cpp",
+        "ostream": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "disabled"
 }
