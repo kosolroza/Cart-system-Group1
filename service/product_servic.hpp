@@ -15,7 +15,6 @@ vector<ListProduct> loadProductsFromFile(const string& filename) {
         cout << "Error: Could not open file " << filename << endl;
         return {};
     }
-
     vector<ListProduct> loadedProducts;
     string line;
     while (getline(ifs, line)) {
