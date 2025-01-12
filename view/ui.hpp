@@ -23,6 +23,8 @@ class UI{
     }
     public:
     static void home(){
+        string filename = "data.txt";
+        productRepositories = loadProductsFromFile(filename);
         while (true)
         {
             option();
@@ -35,13 +37,12 @@ class UI{
                     ListProduct product;
                     cout << "||=============== Add Product " << i + 1 << " ===============||" <<endl;
                     product.addProduct();
-                    addProductInfo(product);
+                    addProductInfo(product, filename);
                     }       
                     break;
                 }
 
                 case 2:{
-                     vector<ListProduct> productList;
                      viewProduct(productRepositories);
                     break;
                 }
@@ -64,15 +65,16 @@ class UI{
                 cin >> newPrice;
 
                 // Call the update function
-                updateProductById(id, newId, newName, newQty, newPrice);
+                updateProductById(id, newId, newName, newQty, newPrice, filename);
 
                     break;
                 }
                 case 4:{
                     int id;
-                    cout<<"Enter product ID to deleted";
+                    string filename = "data.txt";
+                    cout<<"Enter product ID to deleted ";
                     cin>>id;
-                    deleteProductById(id);
+                    deleteProductById(id,filename);
                     break;
                 }
                 case 5:

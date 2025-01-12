@@ -2,7 +2,7 @@
 #include <iomanip>
 #include <iostream>
 #include <vector>
-
+#include <fstream>
 #pragma once
 using namespace std;
 
@@ -12,9 +12,7 @@ private:
     string name;
     int qty;
     double price;
-
 public:
-
     ListProduct() : id(0), name(""), qty(0), price(0.0) {}
     // Constructor
     ListProduct(int id, string name, int qty, double price) {
@@ -29,31 +27,20 @@ public:
     void setPrice(double price) { this->price = price; }
 
     int getId() const { return this->id; }
-    string getName() { return this->name; }   
-    int getQty() { return this->qty; }
-    double getPrice() { return  this->price; }
+    string getName() const { return this->name; }   
+    int getQty() const { return this->qty; }
+    double getPrice() const { return  this->price; }
     
-    // Calculate total price
-    double getTotalPrice() { return qty * price; }
-
     // Calculate discount rate based on total price
     double getDiscountRate() {
-        double grandTotal = getTotalPrice();
-        if (grandTotal > 10) {
+        if (qty > 10) {
             return 20.0;
-        } else if (grandTotal >= 5) {
+        } else if (qty >= 5) {
             return 15.0;
-        } else if (grandTotal >= 3) {
+        } else if (qty >= 3) {
             return 10.0;
         }
         return 0.0;
-    }
-
-    double getFinalPayment() {
-        double grandTotal = getTotalPrice();
-        double discountRate = getDiscountRate();
-        double discount = grandTotal * (discountRate / 100);
-        return grandTotal - discount;
     }
     void addProduct() {
         cout << "[+] Product ID: "; cin >> id;
@@ -63,33 +50,25 @@ public:
         cout << "[+] Product Price: "; cin >> price;
     }
 };
-
 void viewProduct(vector<ListProduct>& productList){
-    cout << "------------------------------------------------------------------------------------------\n";
+    string filename = "data.txt";
+    cout << "-------------------------------------------------------------------------------------\n";
     cout << "| " << setw(12) << left << "ID"
          << setw(15) << left << "Name"      
          << setw(12) << right << "Quantity"
-         << setw(12) << right << "Total"
-         << setw(16) << right << "Discount (%)" 
-         << setw(19) << right << "Total Price" << " |\n";
-    cout << "------------------------------------------------------------------------------------------\n";
-
-    double totalFinalPrice = 0.0;
+         << setw(16) << right << "Price"
+         << setw(23) << right << "Discount (%)" 
+         << setw(6) << right << " |\n";
+    cout << "-------------------------------------------------------------------------------------\n";
 
     for (auto& product : productList) {
-        double totalPrice = product.getTotalPrice();
-        double discountRate = product.getDiscountRate();
-        double finalPayment = product.getFinalPayment();
-        totalFinalPrice += finalPayment;
-
+        double discount = product.getDiscountRate();
         cout << "| " << setw(12) << left << product.getId()
              << setw(15) << left << product.getName()
              << setw(12) << right << product.getQty()
-             << setw(12) << right << fixed << setprecision(2) << totalPrice
-             << setw(14) << right << fixed << setprecision(2) << discountRate << " %"
-             << setw(19) << right << fixed << setprecision(2) << finalPayment << " |\n";
+             << setw(16) << right << fixed << setprecision(2) << product.getPrice()
+             << setw(20) << right << fixed << setprecision(2) << discount << " %"
+             << setw(7) << right << " |\n";
     }
-
-    cout << "------------------------------------------------------------------------------------------\n";
-    cout << "\n[+] Total price for all products: $ " << fixed << setprecision(2) << totalFinalPrice << endl;
+    cout << "-------------------------------------------------------------------------------------\n";
 }

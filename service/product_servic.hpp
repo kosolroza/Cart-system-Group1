@@ -1,59 +1,110 @@
 #include <iostream>
 #include <vector>
+#include <fstream>
+#include <sstream>
 #include "../models/product.hpp"
 #include "../repository/product_repo.hpp"
 
 using namespace std;
 
-vector<ListProduct> getAllProducts() {
-    return productRepositories;
-}
+vector<ListProduct> productRepositories;  
 
-void addProductInfo(ListProduct product) {
-        for (const auto& existingProduct : productRepositories) {
-        if (existingProduct.getId() == product.getId()) {
-            cout << "Error: Product with ID " << product.getId() << " already exists!" << endl;
-            return; // Do not add the product if the ID is duplicated
-        }
+vector<ListProduct> loadProductsFromFile(const string& filename) {
+    ifstream ifs(filename);
+    if (!ifs.is_open()) {
+        cout << "Error: Could not open file " << filename << endl;
+        return {};
     }
 
-    productRepositories.push_back(product);
-    cout << "Product added successfully!" << endl;
+    vector<ListProduct> loadedProducts;
+    string line;
+    while (getline(ifs, line)) {
+        stringstream ss(line);
+        int id, qty;
+        double price;
+        string name;
+
+        if (getline(ss, name, ',') && ss >> id && ss.ignore() && ss >> qty && ss.ignore() && ss >> price) {
+            ListProduct product(id, name, qty, price);
+            loadedProducts.push_back(product);
+        } else {
+            cout << "Error: Failed to parse line: " << line << endl;
+        }
+    }
+    ifs.close();
+    return loadedProducts;
 }
 
+void updateFile(const string& filename, const vector<ListProduct>& productList) {
+    ofstream ofs(filename, ios::trunc);  // Overwrite file
+    if (!ofs.is_open()) {
+        cout << "Error: Could not open file " << filename << endl;
+        return;
+    }
+    
+    for (const auto& product : productList) {
+        ofs << product.getName() << "," << product.getId() << "," << product.getQty() << "," << product.getPrice() << "\n";
+    }
+    ofs.close();
+    cout << "File has been updated!" << endl;
+}
+// Add Product
+void addProductInfo(ListProduct product, const string& filename) {
+    // Load current products
+    productRepositories = loadProductsFromFile(filename);
 
-bool deleteProductById(int id) {
+    // Check for duplicate product ID
+    for (const auto& existingProduct : productRepositories) {
+        if (existingProduct.getId() == product.getId()) {
+            cout << "Error: Product with ID " << product.getId() << " already exists!" << endl;
+            return;
+        }
+    }
+    // Add product to list and update file
+    productRepositories.push_back(product);
+    updateFile(filename, productRepositories);
+    cout << "Product added successfully and saved to file!" << endl;
+}
+// DeleteProduct
+bool deleteProductById(int id, const string& filename) {
+    productRepositories = loadProductsFromFile(filename);
+
     for (size_t i = 0; i < productRepositories.size(); ++i) {
         if (productRepositories[i].getId() == id) {
             productRepositories.erase(productRepositories.begin() + i);
-            cout << "\nProduct with ID " << id << " deleted successfully." << endl;
+            updateFile(filename, productRepositories);
+            cout << "Product with ID " << id << " deleted successfully!" << endl;
             return true;
         }
     }
-    cout << "Product with ID " << id << " not found." << endl;
+    cout << "Product with ID " << id << " not found!" << endl;
     return false;
 }
 
-bool updateProductById(int id, int newId, const std::string& newName, int newQty, double newPrice) {
-    for ( auto& product : productRepositories) {
-        if (product.getId() == newId) {
+// UpdateProduct
+bool updateProductById(int id, int newId, const string& newName, int newQty, double newPrice, const string& filename) {
+    productRepositories = loadProductsFromFile(filename);
+
+    // Check if the new ID already exists
+    for (const auto& existingProduct : productRepositories) {
+        if (existingProduct.getId() == newId) {
             cout << "Error: Product with ID " << newId << " already exists!" << endl;
-            return false; 
+            return false;
         }
     }
 
+    // Find and update the product
     for (auto& product : productRepositories) {
         if (product.getId() == id) {
             product.setId(newId);
             product.setName(newName);
             product.setQty(newQty);
             product.setPrice(newPrice);
-
-            cout << "\nProduct with ID " << id << " updated successfully." << endl;
+            updateFile(filename, productRepositories);
+            cout << "Product updated successfully!" << endl;
             return true;
         }
     }
-
-    cout << "Product with ID " << id << " not found." << endl;
+    cout << "Product with ID " << id << " not found!" << endl;
     return false;
 }

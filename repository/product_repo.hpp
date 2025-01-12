@@ -1,5 +1,6 @@
 #include <vector>
 #include "../models/product.hpp"
 
-vector<ListProduct> productRepositories;
+extern vector<ListProduct> productRepositories;
+vector<ListProduct> loadProductsFromFile(const string& filename);
 

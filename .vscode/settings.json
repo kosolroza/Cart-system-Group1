@@ -4,7 +4,9 @@
         "system_error": "cpp",
         "xlocale": "cpp",
         "iostream": "cpp",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "ios": "cpp",
+        "istream": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }
