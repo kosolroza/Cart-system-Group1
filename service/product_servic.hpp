@@ -8,8 +8,11 @@
 using namespace std;
 
 vector<ListProduct> productRepositories;  
+<<<<<<< HEAD
 //Udate by H
 vector<pair<int, int>> cart; //Cart to hokld product ID and Quantity
+=======
+>>>>>>> 06c0902b1c0d1a6d87836d2449c84ab71b0f4c96
 
 vector<ListProduct> loadProductsFromFile(const string& filename) {
     ifstream ifs(filename);
@@ -49,7 +52,10 @@ void updateFile(const string& filename, const vector<ListProduct>& productList) 
     ofs.close();
     cout << "File has been updated!" << endl;
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 06c0902b1c0d1a6d87836d2449c84ab71b0f4c96
 // Add Product
 void addProductInfo(ListProduct product, const string& filename) {
     // Load current products
@@ -110,11 +116,12 @@ bool updateProductById(int id, int newId, const string& newName, int newQty, dou
     cout << "Product with ID " << id << " not found!" << endl;
     return false;
 }
+<<<<<<< HEAD
 
 // Add Product to Cart (Product ID and Quantity)
 void addProductToCart (int productId, int quantity){
     //Loat product from the file
-    productRepositories = loadProductsFromFile("products.txt");
+    productRepositories = loadProductsFromFile("data.txt");//
     for (const auto& product : productRepositories) {
         if (product.getId() == productId) {
             // Add product ID and Quantity to Cart
@@ -135,7 +142,7 @@ void viewCart() {
     cout << "Code\tName\tQuantity\tPrice\tTotal\n";
 
     //Load products from the file to access the name and price
-    productRepositories = loadProductsFromFile ("products.txt");
+    productRepositories = loadProductsFromFile ("data.txt"); //
 
     //Loop through the cart to get product details and calculate total
     for (const auto& item : cart) {
@@ -151,3 +158,5 @@ void viewCart() {
         }
     }
 }
+=======
+>>>>>>> 06c0902b1c0d1a6d87836d2449c84ab71b0f4c96
