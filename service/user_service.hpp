@@ -128,6 +128,22 @@ void signup (){
     askUserChoice();
 }
 
+void showLoadingLogin() {
+    cout << "\n\033[1;35mVerifying credentials";
+    for (int i = 0; i < 3; i++) {
+        Sleep(300);
+        cout << ".";
+    }
+    cout << "\n\n";
+    
+    cout << "\033[1;32mLoading: [";
+    for (int i = 0; i <= 25; i++) {
+        cout << "█";
+        cout.flush();
+        Sleep(50);
+    }
+    cout << "] 100%\033[0m\n\n";
+}
 
 void login() {
     system("cls");
@@ -149,9 +165,10 @@ void login() {
     enterDetails(user);
     fileToVector();
 
-        for (User &i : userRepository) {
+    for (User &i : userRepository) {
         if (i.getId() == user.getId()) {
             if (i.getEmail() == user.getEmail() && i.getPassword() == user.getPassword() && i.getName() == user.getName()) {
+                showLoadingLogin();  // Add loading animation before success message
                 cout << "\033[1;32m" << R"(
     ╔═══════════════════════════════════════════════════════════════╗
     ║                    ✅ Login Successful! ✅                    ║

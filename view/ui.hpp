@@ -318,6 +318,24 @@ void adminLogin() {
     password = getPassword();
 
     if (email == "admin@gmail.com" && password == "admin123") {
+        // Loading animation
+        cout << "\n\033[1;36mAuthenticating";
+        for (int i = 0; i < 3; i++) {
+            Sleep(300);
+            cout << ".";
+        }
+        cout << "\n\n";
+        
+        // Progress bar animation
+        cout << "\033[1;32mLoading: [";
+        for (int i = 0; i <= 25; i++) {
+            cout << "█";
+            cout.flush();
+            Sleep(50);
+        }
+        cout << "] 100%\033[0m\n\n";
+        
+        // Success message
         cout << "\033[1;32m" << R"(
     ╔═══════════════════════════════════════════════════════════════╗
     ║                    ✅ Login Successful! ✅                    ║
