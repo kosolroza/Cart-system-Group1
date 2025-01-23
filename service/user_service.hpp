@@ -60,16 +60,7 @@ User getUserById(const int id){
     return User();
 }
 void enterDetails(User& user) { //need to pass by reference or else changes will only affect user in enter details, not sign up and log in
-    int id;
-    string name, email, password;
-    cout << "\033[1;33m✩ Enter your ID: \033[0m"; // Yellow
-    cin >> id;
-    
-    // Input for Username
-    cout << "\033[1;33m✩ Enter your Username: \033[0m";
-    cin.ignore();  // Clear the input buffer
-    cin.clear();   // Clear any potential errors
-    getline(cin, name);
+    string email, password;
     
     // Input for Email
     cout << "\033[1;33m✩ Enter your Email: \033[0m";
@@ -79,9 +70,6 @@ void enterDetails(User& user) { //need to pass by reference or else changes will
     cout << "\033[1;33m✩ Enter your Password: \033[0m";
     password = inputPassword();
     
-
-    user.setId(id);
-    user.setName(name);
     user.setEmail(email);
     user.setPassword(password);
 }
@@ -106,11 +94,16 @@ void signup (){
 
     // Ensure the vector is up-to-date with the file
     fileToVector();
+    if(user.getEmail().length() < 10 || user.getEmail().substr(user.getEmail().length() - 10 )!= "@gmail.com"){
+        cout << "\033[1;31mError: Only emails ending with '@gmail.com' are allowed.\033[0m\n";
+        signup();
+        return;
+    }
 
     //check if user already existed
     for (User &i: userRepository) {
-        if(i.getId() == user.getId()) {
-            cout<< "\033[31m!! User with ID " << user.getId() <<" already exists !!"<<endl;
+        if(i.getEmail() == user.getEmail()) {
+            cout<< "\033[31m!! User with this email " << user.getEmail() <<" already exists !!"<<endl;
             cout << "\033[1mDo you want to LOG IN instead? (Y/N) \033[0m";
             char yesno;
             cin >> yesno;
@@ -124,7 +117,7 @@ void signup (){
     }
     // Write the new user directly to the file
     saveUsersToFile();
-    loginSuccessful(user.getName());
+    loginSuccessful(user.getEmail());
     askUserChoice();
 }
 
@@ -166,8 +159,8 @@ void login() {
     fileToVector();
 
     for (User &i : userRepository) {
-        if (i.getId() == user.getId()) {
-            if (i.getEmail() == user.getEmail() && i.getPassword() == user.getPassword() && i.getName() == user.getName()) {
+        if (i.getEmail() == user.getEmail()) {
+            if (i.getPassword() == user.getPassword()) {
                 showLoadingLogin();  // Add loading animation before success message
                 cout << "\033[1;32m" << R"(
     ╔═══════════════════════════════════════════════════════════════╗
