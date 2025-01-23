@@ -42,6 +42,7 @@ public:
         }
         return 0.0;
     }
+
     void addProduct() {
         cout << "[+] Product ID: "; cin >> id;
         cin.ignore();

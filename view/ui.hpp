@@ -65,7 +65,6 @@ class UI{
                 }
                 case 4:{
                     int id;
-                    string filename = "data.txt";
                         cout<<"Enter product ID to deleted ";
                         cin>>id;
                         deleteProductById(id,filename);
